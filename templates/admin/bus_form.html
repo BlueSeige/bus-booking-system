@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% block title %}Bus Form{% endblock %}
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h3 class="fw-bold text-dark">
+    {{ '✏️ Edit Bus' if bus else '🆕 New Bus' }}
+  </h3>
+</div>
+
+<div class="card shadow-sm border-0">
+  <div class="card-body">
+    <form method="post">
+      <div class="row g-4">
+        <!-- Date -->
+        <div class="col-md-4">
+          <label class="form-label fw-semibold">Date</label>
+          <input type="date" name="date" class="form-control" 
+                 value="{{ bus.date if bus else '' }}" required>
+        </div>
+
+        <!-- Time -->
+        <div class="col-md-3">
+          <label class="form-label fw-semibold">Time</label>
+          <input type="time" name="time" class="form-control"
+                 value="{{ bus.time.strftime('%H:%M') if bus else '' }}" required>
+        </div>
+
+        <!-- Capacity -->
+        <div class="col-md-3">
+          <label class="form-label fw-semibold">Capacity</label>
+          <input type="number" name="capacity" class="form-control"
+                 value="{{ bus.capacity if bus else 20 }}" min="1" required>
+        </div>
+
+        <!-- Optional Name -->
+        <div class="col-md-6">
+          <label class="form-label fw-semibold">Name (optional)</label>
+          <input name="name" class="form-control" 
+                 value="{{ bus.name if bus else '' }}" placeholder="e.g. Morning Express">
+        </div>
+      </div>
+
+      <div class="mt-4 d-flex justify-content-end">
+        <a href="/admin/buses" class="btn btn-outline-secondary me-2">
+          <i class="bi bi-arrow-left"></i> Cancel
+        </a>
+        <button class="btn btn-primary shadow-sm">
+          <i class="bi bi-save"></i> Save
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+{% endblock %}

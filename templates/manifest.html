@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% block title %}Manifest{% endblock %}
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h3 class="fw-bold text-dark">
+    🚌 Manifest for {{ bus.date }} {{ '%02d:%02d'|format(bus.time.hour, bus.time.minute) }} 
+    {% if bus.name %} — {{ bus.name }}{% endif %}
+  </h3>
+</div>
+
+<div class="card shadow-sm border-0">
+  <div class="card-body">
+    <div class="table-responsive">
+      <table class="table table-hover align-middle">
+        <thead class="table-light">
+          <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Passenger</th>
+            <th scope="col">Code</th>
+            <th scope="col">Status</th>
+            <th scope="col">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for b in bookings %}
+          <tr>
+            <td class="fw-semibold">{{ b.id }}</td>
+            <td>{{ b.user.name }}</td>
+            <td><span class="badge bg-secondary">{{ b.code }}</span></td>
+            <td>
+              <span class="badge 
+                {% if b.status == 'checked_in' %} bg-success 
+                {% elif b.status == 'Pending' %} bg-warning text-dark 
+                {% elif b.status == 'Cancelled' %} bg-danger 
+                {% else %} bg-secondary {% endif %}">
+                {{ b.status }}
+              </span>
+            </td>
+            <td>
+              {% if b.status != 'checked_in' %}
+              <form method="post" class="d-inline">
+                <input type="hidden" name="booking_id" value="{{ b.id }}">
+                <button class="btn btn-sm btn-outline-success">
+                  ✓ Check-in
+                </button>
+              </form>
+              {% else %}
+              <span class="text-success fw-semibold">✅ On board</span>
+              {% endif %}
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

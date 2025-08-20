@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+
+<div class="container my-4">
+  <!-- Welcome Header -->
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h2 class="fw-bold">🚍 Upcoming Buses</h2>
+      <p class="text-muted mb-0">Manage and view available trips</p>
+    </div>
+    <span class="badge bg-light text-dark px-3 py-2 rounded-pill shadow-sm">
+      Cancellation cutoff: <strong>{{ cutoff }}</strong> mins before departure
+    </span>
+  </div>
+
+  <!-- Bus Table -->
+  <div class="card shadow-sm border-0 rounded-4">
+    <div class="card-body p-0">
+      <table class="table table-hover align-middle mb-0">
+        <thead class="table-primary">
+          <tr>
+            <th>Date</th>
+            <th>Time</th>
+            <th>Capacity</th>
+            <th>Seats Left</th>
+            <th class="text-center">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for bus in buses %}
+          <tr>
+            <td class="fw-semibold">{{ bus.date }}</td>
+            <td>
+              <span class="badge bg-dark text-white">
+                {{ '%02d:%02d'|format(bus.time.hour, bus.time.minute) }}
+              </span>
+            </td>
+            <td>{{ bus.capacity }}</td>
+            <td>
+              {% if bus.seats_left > 5 %}
+                <span class="text-success fw-semibold">{{ bus.seats_left }}</span>
+              {% elif bus.seats_left > 0 %}
+                <span class="text-warning fw-semibold">{{ bus.seats_left }}</span>
+              {% else %}
+                <span class="text-danger fw-semibold">Full</span>
+              {% endif %}
+            </td>
+            <td class="text-center">
+              {% if current_user.role in ['verifier','admin'] %}
+                <a class="btn btn-sm btn-warning px-3" href="/manifest/{{ bus.id }}">
+                  <i class="bi bi-people-fill"></i> Manifest
+                </a>
+              {% else %}
+                <a class="btn btn-sm btn-outline-primary px-3" href="/buses/{{ bus.id }}">
+                  <i class="bi bi-ticket-perforated"></i> View
+                </a>
+              {% endif %}
+            </td>
+          </tr>
+          {% else %}
+          <tr>
+            <td colspan="5" class="text-center text-muted py-4">
+              No upcoming buses at the moment 🚍
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

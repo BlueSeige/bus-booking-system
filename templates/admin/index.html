@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% block title %}Admin{% endblock %}
+{% block content %}
+
+<div class="row mb-4">
+  <div class="col">
+    <h3 class="fw-bold text-dark mb-1">Admin Dashboard</h3>
+    <p class="text-muted">Quick overview and management tools</p>
+  </div>
+</div>
+
+<!-- Stats Section -->
+<div class="row g-3 mb-4">
+  <div class="col-md-4">
+    <div class="card shadow-sm border-0 h-100">
+      <div class="card-body text-center">
+        <i class="bi bi-journal-text fs-1 text-primary mb-2"></i>
+        <h6 class="fw-bold text-secondary">Total Bookings</h6>
+        <h3 class="fw-bold text-dark">{{ total_bookings }}</h3>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-8">
+    <div class="card shadow-sm border-0 h-100">
+      <div class="card-body">
+        <h6 class="fw-bold text-secondary mb-3"><i class="bi bi-bus-front me-2"></i>Today's Buses</h6>
+        <ul class="list-group list-group-flush">
+          {% for b in todays_buses %}
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+              <div>
+                <span class="fw-semibold">{{ b.time.strftime('%H:%M') }}</span> — 
+                {{ b.name or 'Bus' }}
+                <span class="badge bg-info text-dark ms-2">
+                  {{ b.seats_taken }}/{{ b.capacity }} Seats
+                </span>
+              </div>
+              <a href="/manifest/{{ b.id }}" class="btn btn-sm btn-outline-primary">View Manifest</a>
+            </li>
+          {% else %}
+            <li class="list-group-item text-muted">No buses today</li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Actions Section -->
+<div class="card shadow-sm border-0">
+  <div class="card-body">
+    <h6 class="fw-bold text-secondary mb-3"><i class="bi bi-gear me-2"></i>Management</h6>
+    <div class="d-flex flex-wrap gap-2">
+      <a class="btn btn-primary" href="/admin/buses"><i class="bi bi-bus-front me-1"></i> Manage Buses</a>
+      <a class="btn btn-secondary" href="/admin/bookings"><i class="bi bi-journal-text me-1"></i> All Bookings</a>
+      <a class="btn btn-outline-success" href="/admin/users"><i class="bi bi-people me-1"></i> Users</a>
+      <a class="btn btn-outline-dark" href="/admin/settings"><i class="bi bi-sliders me-1"></i> Settings</a>
+      <a class="btn btn-outline-info" href="/admin/reports.csv"><i class="bi bi-download me-1"></i> Export CSV</a>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

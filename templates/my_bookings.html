@@ -1,0 +1,9 @@
+{% extends 'base.html' %}{% block title %}My Bookings{% endblock %}{% block content %}
+<h3>My Bookings</h3>
+<table class='table table-striped'><thead><tr><th>ID</th><th>Code</th><th>Date</th><th>Time</th><th>Status</th><th></th></tr></thead><tbody>
+{% for b in bookings %}
+<tr><td>{{ b.id }}</td><td>{{ b.code }}</td><td>{{ b.bus.date }}</td><td>{{ '%02d:%02d'|format(b.bus.time.hour, b.bus.time.minute) }}</td><td>{{ b.status }}</td>
+<td><a class='btn btn-sm btn-outline-primary' href='/booking/{{b.id}}'>Open</a></td></tr>
+{% endfor %}
+</tbody></table>
+{% endblock %}

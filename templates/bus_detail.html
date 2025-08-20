@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% block title %}Bus Detail{% endblock %}
+{% block content %}
+
+<div class="d-flex justify-content-center">
+  <div class="card shadow-sm p-4" style="max-width: 600px; width: 100%;">
+    <div class="text-center mb-3">
+      <h3 class="fw-bold">🚌 Bus Details</h3>
+      <p class="text-muted mb-0">
+        {{ bus.date }} · {{ '%02d:%02d'|format(bus.time.hour, bus.time.minute) }}
+      </p>
+    </div>
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <p class="mb-0">Capacity: <b>{{ bus.capacity }}</b></p>
+      <p class="mb-0">Seats left: <b id="left">{{ bus.seats_left }}</b></p>
+    </div>
+
+    {% if booking %}
+      <div class="alert alert-info text-center">
+        <h6 class="fw-bold mb-1">You already booked this bus ✅</h6>
+        <p class="mb-1">Code: <b>{{ booking.code }}</b></p>
+        <span class="badge bg-secondary">{{ booking.status }}</span>
+      </div>
+      <div class="text-center">
+        <a class="btn btn-outline-primary w-100" href="/booking/{{ booking.id }}">
+          View My Booking
+        </a>
+      </div>
+    {% else %}
+      <form method="post" action="/book/{{ bus.id }}">
+        <button class="btn btn-primary w-100" 
+                {% if bus.seats_left == 0 %}disabled{% endif %}>
+          {% if bus.seats_left == 0 %}
+            🚫 Fully Booked
+          {% else %}
+            🎟️ Book Seat
+          {% endif %}
+        </button>
+      </form>
+    {% endif %}
+  </div>
+</div>
+
+<script>
+async function refresh() {
+  const r = await fetch('/api/bus/{{bus.id}}/seats');
+  const d = await r.json();
+  document.getElementById('left').innerText = d.left;
+}
+setInterval(refresh, 5000);
+</script>
+
+{% endblock %}

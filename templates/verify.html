@@ -1,0 +1,12 @@
+{% extends 'base.html' %}{% block title %}Verify{% endblock %}{% block content %}
+<h3>Verify Booking</h3>
+<form method=post class='row g-2'>
+  <div class='col-auto'><input name=code class='form-control' placeholder='Enter code'></div>
+  <div class='col-auto'><button class='btn btn-primary'>Check</button></div>
+</form>
+{% if booking %}
+<div class='alert alert-info mt-3'>
+  Booking #{{ booking.id }} — {{ booking.user.name }} · {{ booking.bus.date }} {{ '%02d:%02d'|format(booking.bus.time.hour, booking.bus.time.minute) }} — Status: {{ booking.status }}
+</div>
+{% endif %}
+{% endblock %}

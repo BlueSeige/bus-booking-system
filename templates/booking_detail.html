@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block title %}Booking Details{% endblock %}
+{% block content %}
+
+<div class="d-flex justify-content-center mt-5">
+  <div class="card shadow-lg p-4" style="max-width: 500px; width: 100%;">
+    <h3 class="text-center mb-4">Booking Details</h3>
+    
+    <div class="text-center mb-3">
+      <h5 class="mb-1">Booking #{{ b.id }}</h5>
+      <p class="text-muted">Code: <span class="fw-bold">{{ b.code }}</span></p>
+    </div>
+
+    <ul class="list-group list-group-flush mb-4">
+      <li class="list-group-item">
+        <strong>Bus Date:</strong> {{ b.bus.date }}
+      </li>
+      <li class="list-group-item">
+        <strong>Time:</strong> {{ '%02d:%02d'|format(b.bus.time.hour, b.bus.time.minute) }}
+      </li>
+      <li class="list-group-item">
+        <strong>Status:</strong> 
+        <span class="badge bg-info text-dark">{{ b.status }}</span>
+      </li>
+    </ul>
+
+    <form method="post" action="/booking/{{ b.id }}/cancel" class="text-center">
+      <button class="btn btn-outline-danger w-100">Cancel Booking</button>
+    </form>
+  </div>
+</div>
+
+{% endblock %}
